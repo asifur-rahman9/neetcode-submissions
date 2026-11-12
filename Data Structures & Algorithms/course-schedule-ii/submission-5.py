@@ -1,0 +1,37 @@
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        graph = defaultdict(list)
+        
+        for a, b in prerequisites:
+            graph[b].append(a)
+
+
+        path = set()
+        visited = set()
+        res = []
+
+
+        def dfs(node):
+            if node in path:
+                return False
+
+            if node in visited:
+                return True
+
+            path.add(node)
+            for nei in graph[node]:
+                if not dfs(nei):
+                    return False
+            path.remove(node)
+
+            visited.add(node)
+
+            res.append(node)
+
+            return True
+
+        for i in range(numCourses):
+            if not dfs(i):
+                return []
+        res.reverse()
+        return res
